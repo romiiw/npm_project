@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Resultate Umfrage</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+  .tooltip {
+    position: absolute;
+    background-color: white;
+    border: 1px solid gray;
+    padding: 5px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  svg rect:hover {
+    fill: orange;
+    cursor: pointer;
+  }
+  svg path:hover {
+    opacity: 0.7;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<h1>Resultate Umfrage</h1>
+
+<h2>Beliebste Monate</h2>
+<div id="pieChart"></div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+const tooltip = d3.select("#tooltip");
+
+
+// --- Kreisdiagramm ---
+// Daten: 12 Monate, zufällige Werte
+const months = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
+const pieData = months.map(() => Math.floor(Math.random() * 100) + 10);
+
+const width = 400, height = 400, radius = Math.min(width, height) / 2;
+
+const svg = d3.select("#pieChart")
+  .append("svg")
+  .attr("width", width)
+  .attr("height", height)
+  .append("g")
+  .attr("transform", `translate(${width/2}, ${height/2})`);
+
+const color = d3.scaleOrdinal()
+  .domain(months)
+  .range(d3.schemeTableau10.concat(d3.schemeSet3.slice(0,2))); // 12 unterschiedliche Farben
+
+const pie = d3.pie();
+const arc = d3.arc().innerRadius(0).outerRadius(radius);
+
+svg.selectAll("path")
+  .data(pie(pieData))
+  .join("path")
+  .attr("d", arc)
+  .attr("fill", (_, i) => color(months[i]))
+  .on("mouseover", function(event, d) {
+    d3.select(this).attr("opacity", 0.7);
+    tooltip.style("opacity", 1).text(`Monat: ${months[d.index]}, Wert: ${d.data}`);
+  })
+  .on("mousemove", function(event) {
+    tooltip.style("left", (event.pageX + 10) + "px")
+           .style("top", (event.pageY - 20) + "px");
+  })
+  .on("mouseout", function() {
+    d3.select(this).attr("opacity", 1);
+    tooltip.style("opacity", 0);
+  });
+</script>
+</body>
+</html>

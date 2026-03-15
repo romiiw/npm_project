@@ -1,0 +1,39 @@
+# =========================
+# Node.js
+# =========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+dist/
+build/
+
+# =========================
+# Gradle
+# =========================
+.gradle/
+build/
+
+# =========================
+# IDE / Editor
+# =========================
+# VS Code
+.vscode/
+*.code-workspace
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Eclipse
+*.classpath
+*.project
+*.settings/
+
+# =========================
+# System / OS
+# =========================
+# macOS
+.DS_Store
